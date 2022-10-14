@@ -3,13 +3,14 @@
 namespace GPapakitsos\LaravelTraits\Tests\Models;
 
 use Database\Factories\UserFactory;
+use GPapakitsos\LaravelTraits\ModelActive;
 use GPapakitsos\LaravelTraits\TimestampsAccessor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use HasFactory, TimestampsAccessor;
+    use HasFactory, TimestampsAccessor, ModelActive;
 
     /**
      * Create a new factory instance for the model.

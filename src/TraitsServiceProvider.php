@@ -18,5 +18,7 @@ class TraitsServiceProvider extends ServiceProvider
                 __DIR__.'/../config/laraveltraits.php' => config_path('laraveltraits.php'),
             ]);
         }
+
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'laraveltraits');
     }
 }
