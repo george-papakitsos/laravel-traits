@@ -1,0 +1,22 @@
+<?php
+
+namespace GPapakitsos\LaravelTraits;
+
+use Illuminate\Support\ServiceProvider;
+
+class TraitsServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any package services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/laraveltraits.php' => config_path('laraveltraits.php'),
+            ]);
+        }
+    }
+}
