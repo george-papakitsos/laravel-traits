@@ -16,6 +16,8 @@ class CreateCountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id('id');
             $table->string('name');
+            $table->string('planet');
+            $table->unsignedInteger('ordering');
         });
     }
 

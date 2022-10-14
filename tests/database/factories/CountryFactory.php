@@ -23,6 +23,8 @@ class CountryFactory extends Factory
     {
         return [
             'name' => $this->faker->country(),
+            'planet' => 'Earth',
+            'ordering' => 1,
         ];
     }
 }

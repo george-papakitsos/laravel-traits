@@ -3,12 +3,13 @@
 namespace GPapakitsos\LaravelTraits\Tests\Models;
 
 use Database\Factories\CountryFactory;
+use GPapakitsos\LaravelTraits\ModelOrdering;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelOrdering;
 
     /**
      * Indicates if the model should be timestamped.
@@ -33,5 +34,15 @@ class Country extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Scopes
+     */
+    public function scopeOrderingFilterBy($query, $fieldsAndValues)
+    {
+        foreach ($fieldsAndValues as $field => $value) {
+            $query->where($field, $value);
+        }
     }
 }
