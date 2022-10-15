@@ -10,4 +10,8 @@ return [
         'field' => 'active',
     ],
 
+    'ModelOrdering' => [
+        'field' => 'ordering',
+    ],
+
 ];

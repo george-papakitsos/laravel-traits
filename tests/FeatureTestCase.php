@@ -4,7 +4,6 @@ namespace GPapakitsos\LaravelTraits\Tests;
 
 use GPapakitsos\LaravelTraits\Tests\Models\Country;
 use GPapakitsos\LaravelTraits\Tests\Models\User;
-use GPapakitsos\LaravelTraits\Tests\Models\UserLogin;
 use GPapakitsos\LaravelTraits\TraitsServiceProvider;
 use Orchestra\Testbench\TestCase;
 
@@ -20,9 +19,9 @@ class FeatureTestCase extends TestCase
 
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
-        User::factory()->has(UserLogin::factory()->count(rand(1, 5)))->count(49)->create();
+        User::factory()->count(49)->create();
         $this->country = Country::factory()->create();
-        $this->user = User::factory()->has(UserLogin::factory()->count(rand(10, 20)))->create([
+        $this->user = User::factory()->create([
             'name' => 'George Papakitsos',
             'email' => 'papakitsos_george@yahoo.gr',
             'active' => true,
@@ -52,5 +51,6 @@ class FeatureTestCase extends TestCase
 
         $app->config->set('laraveltraits.TimestampsAccessor.format', 'd/m/Y H:i:s');
         $app->config->set('laraveltraits.ModelActive.field', 'active');
+        $app->config->set('laraveltraits.ModelOrdering.field', 'ordering');
     }
 }
