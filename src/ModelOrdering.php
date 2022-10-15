@@ -2,6 +2,8 @@
 
 namespace GPapakitsos\LaravelTraits;
 
+use ErrorException;
+
 trait ModelOrdering
 {
     /**
@@ -19,11 +21,13 @@ trait ModelOrdering
      *
      * @param  array  $fieldsAndValues
      * @return int
+     *
+     * @throws ErrorException
      */
     public static function getNewOrdering($fieldsAndValues = [])
     {
         if (! empty($fieldsAndValues) && ! method_exists(self::class, 'scopeOrderingFilterBy')) {
-            throw new \ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);
+            throw new ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);
         }
 
         $field = self::getOrderingField();
@@ -38,11 +42,13 @@ trait ModelOrdering
      *
      * @param  array  $fieldsAndValues
      * @return void
+     *
+     * @throws ErrorException
      */
     public static function resetOrdering($fieldsAndValues = [])
     {
         if (! empty($fieldsAndValues) && ! method_exists(self::class, 'scopeOrderingFilterBy')) {
-            throw new \ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);
+            throw new ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);
         }
 
         $field = self::getOrderingField();

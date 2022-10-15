@@ -15,7 +15,7 @@ trait ModelActive
     }
 
     /**
-     * Checks if model's state is active
+     * Checks if model’s state is active
      *
      * @return bool
      */
@@ -25,7 +25,7 @@ trait ModelActive
     }
 
     /**
-     * Returns the title of model's state
+     * Returns the title of model’s state
      *
      * @return string
      */
