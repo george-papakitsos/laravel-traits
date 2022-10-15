@@ -10,7 +10,6 @@ trait ModelFile
     /**
      * Checks if constant is defined
      *
-     * @param  string  $constant
      * @return void
      *
      * @throws ErrorException
