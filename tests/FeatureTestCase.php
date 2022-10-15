@@ -53,4 +53,14 @@ class FeatureTestCase extends TestCase
         $app->config->set('laraveltraits.ModelActive.field', 'active');
         $app->config->set('laraveltraits.ModelOrdering.field', 'ordering');
     }
+
+    protected function defineRoutes($router)
+    {
+        $router->group(['prefix' => 'users', 'namespace' => 'GPapakitsos\LaravelTraits\Tests\Controllers'], function () use ($router) {
+            $router->get('get-resource/{id?}', 'UsersController@getResource');
+            $router->post('add', 'UsersController@doAdd');
+            $router->post('edit', 'UsersController@doEdit');
+            $router->post('delete', 'UsersController@doDelete');
+        });
+    }
 }

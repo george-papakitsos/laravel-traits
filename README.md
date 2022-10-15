@@ -178,3 +178,133 @@ $user->getFileURL();
  */
 $user->getFilePath();
 ```
+
+---
+### CRUDController Trait
+A useful trait to handle model’s CRUD function inside a controller.
+
+To enable this feature on a controller, you must use the `GPapakitsos\LaravelTraits\CRUDController` trait and you have to define the `request` and `model` properties at your controller:
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use GPapakitsos\LaravelTraits\CRUDController;
+use Illuminate\Http\Request;
+
+class UsersController extends Controller
+{
+    use CRUDController;
+
+    protected $request;
+    protected $model;
+
+    // You can set the property $returnModelsFromCRUD as `true` if you would like the methods `doAdd` & `doEdit` to return the model
+    // protected $returnModelsFromCRUD = true;
+
+    public function __construct(Request $request, User $model)
+    {
+        $this->request = $request;
+        $this->model = $model;
+    }
+}
+```
+
+After that, you have to define the routes of the controller in your `routes/web.php` file:
+```php
+Route::prefix('users')->group(function () {
+    Route::get('get-resource/{id?}', 'UsersController@getResource');
+    Route::post('add', 'UsersController@doAdd');
+    Route::post('edit', 'UsersController@doEdit');
+    Route::post('delete', 'UsersController@doDelete');
+});
+```
+
+Finally, you have to define the `fillable` property and the validation rules of your model:
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    /**
+     * The attributes that are mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'email', 'password'];
+
+    /**
+     * Validation rules of the model
+     *
+     * @var array
+     */
+    public $validations = [
+        'add' => [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:8|max:30',
+        ],
+        'edit' => [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'nullable|min:8|max:30',
+        ],
+        // or you can set only the array with key `all`, if the rules are the same between `add` & `edit`
+        // 'all' => [
+        //     'name' => 'required|max:255',
+        //     'email' => 'required|email|max:255',
+        //     'password' => 'required|min:8|max:30',
+        // ],
+    ];
+}
+```
+
+#### Available controller methods:
+```php
+/**
+ * Returns model’s JSON response by provided id
+ *
+ * @return \Illuminate\Http\JsonResponse
+ *
+ * @throws ErrorException|\Illuminate\Database\Eloquent\ModelNotFoundException
+ */
+getResource();
+```
+
+```php
+/**
+ * Creates a new model if the request is valid
+ *
+ * @return \Illuminate\Http\JsonResponse|\Illuminate\Database\Eloquent\Model
+ *
+ * @throws ErrorException|\Illuminate\Validation\ValidationException
+ */
+doAdd();
+```
+
+```php
+/**
+ * Updates the model if the request is valid
+ *
+ * @return \Illuminate\Http\JsonResponse|\Illuminate\Database\Eloquent\Model
+ *
+ * @throws ErrorException|\Illuminate\Validation\ValidationException|\Illuminate\Database\Eloquent\ModelNotFoundException
+ */
+doEdit();
+```
+
+```php
+/**
+ * Deletes a model
+ *
+ * @return \Illuminate\Http\JsonResponse
+ *
+ * @throws ErrorException|\Illuminate\Database\Eloquent\ModelNotFoundException
+ */
+doDelete();
+```

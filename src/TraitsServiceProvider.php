@@ -20,5 +20,9 @@ class TraitsServiceProvider extends ServiceProvider
         }
 
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'laraveltraits');
+
+        $this->publishes([
+            __DIR__.'/../lang' => $this->app->langPath('vendor/laraveltraits'),
+        ]);
     }
 }

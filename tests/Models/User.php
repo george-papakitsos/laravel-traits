@@ -20,6 +20,31 @@ class User extends Model
     const FILE_DEFAULT_ASSET_URL = 'avatars/default.png';
 
     /**
+     * The attributes that are mass assignable
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'email', 'password'];
+
+    /**
+     * Validation rules of the model
+     *
+     * @var array
+     */
+    public $validations = [
+        'add' => [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+            'password' => 'required|min:8|max:30',
+        ],
+        'edit' => [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'nullable|min:8|max:30',
+        ],
+    ];
+
+    /**
      * Create a new factory instance for the model.
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
