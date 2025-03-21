@@ -128,6 +128,7 @@ class User extends Model
     const FILE_FOLDER = 'avatars'; // The folder name of the storage disk
     const FILE_STORAGE_DISK = 'local'; // The storage disk
     const FILE_DEFAULT_ASSET_URL = 'avatars/default.png'; // The default asset if file does not exist
+    const FILE_USE_SUBFOLDER = true; // [Optional] If true, the file will be stored in a random subdirectory into FILE_FOLDER path
 }
 ```
 

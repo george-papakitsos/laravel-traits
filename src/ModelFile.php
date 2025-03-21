@@ -4,6 +4,7 @@ namespace GPapakitsos\LaravelTraits;
 
 use ErrorException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 trait ModelFile
 {
@@ -42,8 +43,14 @@ trait ModelFile
                 self::FILE_INPUT_FIELD => 'max:'.(self::convertToBytes(ini_get('upload_max_filesize')) / 1024),
             ]);
 
+            $path = self::FILE_FOLDER;
+            if (defined(self::class.'::FILE_USE_SUBFOLDER') && self::FILE_USE_SUBFOLDER === true) {
+                $subfolder = substr(sha1($file->hashName()), 0, 2);
+                $path .= '/'.$subfolder;
+            }
+
             $request->request->add([
-                self::FILE_MODEL_ATTRIBUTE => $file->store(self::FILE_FOLDER, self::FILE_STORAGE_DISK),
+                self::FILE_MODEL_ATTRIBUTE => $file->store($path, self::FILE_STORAGE_DISK),
             ]);
         }
     }
@@ -72,6 +79,13 @@ trait ModelFile
     {
         if (! empty($this->{$this::FILE_MODEL_ATTRIBUTE}) && Storage::disk($this::FILE_STORAGE_DISK)->exists($this->{$this::FILE_MODEL_ATTRIBUTE})) {
             Storage::disk($this::FILE_STORAGE_DISK)->delete($this->{$this::FILE_MODEL_ATTRIBUTE});
+
+            if (defined(self::class.'::FILE_USE_SUBFOLDER') && self::FILE_USE_SUBFOLDER === true) {
+                $path = Str::beforeLast($this->{$this::FILE_MODEL_ATTRIBUTE}, '/');
+                if (empty(Storage::disk($this::FILE_STORAGE_DISK)->allFiles($path))) {
+                    Storage::disk($this::FILE_STORAGE_DISK)->deleteDirectory($path);
+                }
+            }
         }
     }
 

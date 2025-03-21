@@ -11,13 +11,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
-    use HasFactory, TimestampsAccessor, ModelActive, ModelFile;
+    use HasFactory, ModelActive, ModelFile, TimestampsAccessor;
 
     const FILE_MODEL_ATTRIBUTE = 'avatar';
     const FILE_INPUT_FIELD = 'avatar_input';
     const FILE_FOLDER = 'avatars';
     const FILE_STORAGE_DISK = 'local';
     const FILE_DEFAULT_ASSET_URL = 'avatars/default.png';
+    const FILE_USE_SUBFOLDER = true;
 
     /**
      * The attributes that are mass assignable
