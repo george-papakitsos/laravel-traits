@@ -42,7 +42,7 @@ trait ModelActive
      */
     public function scopeActive($query)
     {
-        $query->where($this->getTable().'.'.$this->getActiveField(), 1);
+        $query->where($this->getTable().'.'.$this->getActiveField(), true);
     }
 
     /**
@@ -53,6 +53,6 @@ trait ModelActive
      */
     public function scopeNotActive($query)
     {
-        $query->where($this->getTable().'.'.$this->getActiveField(), 0);
+        $query->where($this->getTable().'.'.$this->getActiveField(), false);
     }
 }

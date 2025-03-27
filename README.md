@@ -7,8 +7,13 @@ A bundle of some useful Laravel Model & Controller traits.
 
 ## Installation
 You can install the package via composer:
+### Laravel version >= 12
 ```bash
 composer require gpapakitsos/laravel-traits
+```
+### Laravel version <= 11
+```bash
+composer require gpapakitsos/laravel-traits "~1.3"
 ```
 
 The service provider will automatically get registered. Optionally, you may manually add the service provider in your `config/app.php` file:
