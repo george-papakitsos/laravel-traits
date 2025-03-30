@@ -52,6 +52,7 @@ class FeatureTestCase extends TestCase
         $app->config->set('laraveltraits.TimestampsAccessor.format', 'd/m/Y H:i:s');
         $app->config->set('laraveltraits.ModelActive.field', 'active');
         $app->config->set('laraveltraits.ModelOrdering.field', 'ordering');
+        $app->config->set('laraveltraits.ModelFile.default_storage_disk', 'local');
     }
 
     protected function defineRoutes($router)

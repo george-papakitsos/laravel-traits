@@ -27,7 +27,7 @@ class ModelFileTest extends FeatureTestCase
         $request = $this->getRequestWithFile();
         $this->user::storeFile($request);
 
-        Storage::disk($this->user::FILE_STORAGE_DISK)->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
+        Storage::disk($this->user::getStorageDisk())->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
     }
 
     public function test_store_file_path_into_request()
@@ -55,7 +55,7 @@ class ModelFileTest extends FeatureTestCase
 
         $this->user->deleteFile();
 
-        Storage::disk($this->user::FILE_STORAGE_DISK)->assertMissing($request->{$this->user::FILE_MODEL_ATTRIBUTE});
+        Storage::disk($this->user::getStorageDisk())->assertMissing($request->{$this->user::FILE_MODEL_ATTRIBUTE});
     }
 
     public function test_change_file_upload()
@@ -66,7 +66,7 @@ class ModelFileTest extends FeatureTestCase
         ]);
         $this->user::changeFile($request);
 
-        Storage::disk($this->user::FILE_STORAGE_DISK)->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
+        Storage::disk($this->user::getStorageDisk())->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
     }
 
     public function test_get_file_url_without_file()
