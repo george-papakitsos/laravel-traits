@@ -14,4 +14,8 @@ return [
         'field' => 'ordering',
     ],
 
+    'ModelFile' => [
+        'default_storage_disk' => 'local',
+    ],
+
 ];
