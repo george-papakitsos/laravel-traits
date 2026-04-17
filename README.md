@@ -1,17 +1,13 @@
 # Laravel Model & Controller Traits
 A bundle of some useful Laravel Model & Controller traits.
 
-## Requirements
-- [PHP >= 7.4](https://www.php.net/)
-- [Laravel >= 8.0](https://laravel.com/)
-
 ## Installation
 You can install the package via composer:
-### Laravel version >= 12
+### Laravel version >= 12 (requires PHP >= 8.2)
 ```bash
 composer require gpapakitsos/laravel-traits
 ```
-### Laravel version <= 11
+### Laravel version <= 11 (requires PHP >= 7.4)
 ```bash
 composer require gpapakitsos/laravel-traits "~1.3"
 ```
@@ -140,6 +136,14 @@ class User extends Model
 #### Available methods:
 ```php
 /**
+ * Returns the storage disk
+ *
+ * @return string
+ */
+$user->getStorageDisk();
+```
+```php
+/**
  * Stores file if exists & adds the path of the uploaded file into request object
  *
  * @param  \Illuminate\Http\Request  $request
@@ -167,6 +171,14 @@ $user->deleteFile();
  * @throws ErrorException|\Illuminate\Validation\ValidationException
  */
 $user::changeFile($request);
+```
+```php
+/**
+ * Checks if file exists
+ *
+ * @return bool
+ */
+$user->fileExists();
 ```
 ```php
 /**
