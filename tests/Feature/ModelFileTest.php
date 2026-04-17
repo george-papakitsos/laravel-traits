@@ -14,7 +14,7 @@ class ModelFileTest extends FeatureTestCase
     {
         Storage::fake($this->user::FILE_FOLDER);
 
-        $request = new Request([], [], [], [], [
+        $request = new Request(files: [
             $this->user::FILE_INPUT_FIELD => UploadedFile::fake()->image('avatar.jpg')->size($fileSizeInMB * 1024),
         ]);
         $request->setMethod('POST');
@@ -22,18 +22,26 @@ class ModelFileTest extends FeatureTestCase
         return $request;
     }
 
-    public function test_store_file_upload()
+    private function storeFileToUser()
     {
         $request = $this->getRequestWithFile();
         $this->user::storeFile($request);
+        $this->user->{$this->user::FILE_MODEL_ATTRIBUTE} = $request->{$this->user::FILE_MODEL_ATTRIBUTE};
+        $this->user->save();
+
+        return $request;
+    }
+
+    public function test_store_file_upload()
+    {
+        $request = $this->storeFileToUser();
 
         Storage::disk($this->user::getStorageDisk())->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
     }
 
     public function test_store_file_path_into_request()
     {
-        $request = $this->getRequestWithFile();
-        $this->user::storeFile($request);
+        $request = $this->storeFileToUser();
 
         $this->assertTrue($request->has($this->user::FILE_MODEL_ATTRIBUTE));
     }
@@ -48,11 +56,7 @@ class ModelFileTest extends FeatureTestCase
 
     public function test_delete_file()
     {
-        $request = $this->getRequestWithFile();
-        $this->user::storeFile($request);
-        $this->user->{$this->user::FILE_MODEL_ATTRIBUTE} = $request->{$this->user::FILE_MODEL_ATTRIBUTE};
-        $this->user->save();
-
+        $request = $this->storeFileToUser();
         $this->user->deleteFile();
 
         Storage::disk($this->user::getStorageDisk())->assertMissing($request->{$this->user::FILE_MODEL_ATTRIBUTE});
@@ -69,6 +73,18 @@ class ModelFileTest extends FeatureTestCase
         Storage::disk($this->user::getStorageDisk())->assertExists($request->{$this->user::FILE_MODEL_ATTRIBUTE});
     }
 
+    public function test_file_exists_without_file()
+    {
+        $this->assertFalse($this->user->fileExists());
+    }
+
+    public function test_file_exists_with_file()
+    {
+        $this->storeFileToUser();
+
+        $this->assertTrue($this->user->fileExists());
+    }
+
     public function test_get_file_url_without_file()
     {
         $this->assertStringContainsString($this->user::FILE_DEFAULT_ASSET_URL, $this->user->getFileURL());
@@ -76,10 +92,7 @@ class ModelFileTest extends FeatureTestCase
 
     public function test_get_file_url_with_file()
     {
-        $request = $this->getRequestWithFile();
-        $this->user::storeFile($request);
-        $this->user->{$this->user::FILE_MODEL_ATTRIBUTE} = $request->{$this->user::FILE_MODEL_ATTRIBUTE};
-        $this->user->save();
+        $this->storeFileToUser();
 
         $this->assertStringContainsString($this->user->{$this->user::FILE_MODEL_ATTRIBUTE}, $this->user->getFileURL());
     }
@@ -91,10 +104,7 @@ class ModelFileTest extends FeatureTestCase
 
     public function test_get_file_path_with_file()
     {
-        $request = $this->getRequestWithFile();
-        $this->user::storeFile($request);
-        $this->user->{$this->user::FILE_MODEL_ATTRIBUTE} = $request->{$this->user::FILE_MODEL_ATTRIBUTE};
-        $this->user->save();
+        $this->storeFileToUser();
 
         $this->assertStringContainsString($this->user->{$this->user::FILE_MODEL_ATTRIBUTE}, $this->user->getFilePath());
     }

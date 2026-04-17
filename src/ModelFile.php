@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 trait ModelFile
 {
     /**
-     * Checks if constant is defined
+     * Checks if constants are defined
      *
      * @return void
      *
@@ -87,14 +87,18 @@ trait ModelFile
      */
     public function deleteFile()
     {
-        if (! empty($this->{$this::FILE_MODEL_ATTRIBUTE}) && Storage::disk($this::getStorageDisk())->exists($this->{$this::FILE_MODEL_ATTRIBUTE})) {
-            Storage::disk($this::getStorageDisk())->delete($this->{$this::FILE_MODEL_ATTRIBUTE});
+        if (! $this->fileExists()) {
+            return;
+        }
 
-            if (defined(self::class.'::FILE_USE_SUBFOLDER') && self::FILE_USE_SUBFOLDER === true) {
-                $path = Str::beforeLast($this->{$this::FILE_MODEL_ATTRIBUTE}, '/');
-                if (empty(Storage::disk($this::getStorageDisk())->allFiles($path))) {
-                    Storage::disk($this::getStorageDisk())->deleteDirectory($path);
-                }
+        $storageDisk = $this::getStorageDisk();
+        $path = $this->{$this::FILE_MODEL_ATTRIBUTE};
+        Storage::disk($storageDisk)->delete($path);
+
+        if (defined(self::class.'::FILE_USE_SUBFOLDER') && self::FILE_USE_SUBFOLDER === true) {
+            $path = Str::beforeLast($path, '/');
+            if (empty(Storage::disk($storageDisk)->allFiles($path))) {
+                Storage::disk($storageDisk)->deleteDirectory($path);
             }
         }
     }
@@ -125,15 +129,29 @@ trait ModelFile
     }
 
     /**
+     * Checks if file exists
+     *
+     * @return bool
+     */
+    public function fileExists()
+    {
+        $path = $this->{$this::FILE_MODEL_ATTRIBUTE};
+
+        return ! empty($path) && Storage::disk($this::getStorageDisk())->exists($path);
+    }
+
+    /**
      * Returns file’s URL
      *
      * @return string|null
      */
     public function getFileURL()
     {
-        return ! empty($this->{$this::FILE_MODEL_ATTRIBUTE}) && Storage::disk($this::getStorageDisk())->exists($this->{$this::FILE_MODEL_ATTRIBUTE})
-            ? Storage::disk($this::getStorageDisk())->url($this->{$this::FILE_MODEL_ATTRIBUTE})
-            : ($this::FILE_DEFAULT_ASSET_URL === null ? null : Storage::disk($this::getStorageDisk())->url($this::FILE_DEFAULT_ASSET_URL));
+        $storageDisk = $this::getStorageDisk();
+
+        return $this->fileExists()
+            ? Storage::disk($storageDisk)->url($this->{$this::FILE_MODEL_ATTRIBUTE})
+            : ($this::FILE_DEFAULT_ASSET_URL === null ? null : Storage::disk($storageDisk)->url($this::FILE_DEFAULT_ASSET_URL));
     }
 
     /**
@@ -143,9 +161,11 @@ trait ModelFile
      */
     public function getFilePath()
     {
-        return ! empty($this->{$this::FILE_MODEL_ATTRIBUTE}) && Storage::disk($this::getStorageDisk())->exists($this->{$this::FILE_MODEL_ATTRIBUTE})
-            ? Storage::disk($this::getStorageDisk())->path($this->{$this::FILE_MODEL_ATTRIBUTE})
-            : ($this::FILE_DEFAULT_ASSET_URL === null ? null : Storage::disk($this::getStorageDisk())->path($this::FILE_DEFAULT_ASSET_URL));
+        $storageDisk = $this::getStorageDisk();
+
+        return $this->fileExists()
+            ? Storage::disk($storageDisk)->path($this->{$this::FILE_MODEL_ATTRIBUTE})
+            : ($this::FILE_DEFAULT_ASSET_URL === null ? null : Storage::disk($storageDisk)->path($this::FILE_DEFAULT_ASSET_URL));
     }
 
     /**
