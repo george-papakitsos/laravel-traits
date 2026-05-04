@@ -8,10 +8,8 @@ class TraitsServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any package services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([

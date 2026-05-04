@@ -8,23 +8,25 @@ trait TimestampsAccessor
 {
     /**
      * created_at attribute accessor
-     *
-     * @param  mixed  $value
-     * @return string|null
      */
-    public function getCreatedAtAttribute($value)
+    public function getCreatedAtAttribute(mixed $value): ?string
     {
-        return ! empty($value) ? Carbon::parse($value)->format(config('laraveltraits.TimestampsAccessor.format') ?? 'd/m/Y H:i:s') : null;
+        return $this->timestampsFormatter($value);
     }
 
     /**
      * updated_at attribute accessor
-     *
-     * @param  mixed  $value
-     * @return string|null
      */
-    public function getUpdatedAtAttribute($value)
+    public function getUpdatedAtAttribute(mixed $value): ?string
     {
-        return ! empty($value) ? Carbon::parse($value)->format(config('laraveltraits.TimestampsAccessor.format') ?? 'd/m/Y H:i:s') : null;
+        return $this->timestampsFormatter($value);
+    }
+
+    /**
+     * Transforms the provided timestamp to a formatted string
+     */
+    private function timestampsFormatter(?string $value): ?string
+    {
+        return ! empty($value) ? Carbon::parse($value)->setTimezone(config('app.timezone'))->format(config('laraveltraits.TimestampsAccessor.format') ?? 'd/m/Y H:i:s') : null;
     }
 }

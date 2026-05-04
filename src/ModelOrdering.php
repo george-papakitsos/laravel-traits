@@ -8,10 +8,8 @@ trait ModelOrdering
 {
     /**
      * Returns the title of "ordering" attribute
-     *
-     * @return string
      */
-    private static function getOrderingField()
+    private static function getOrderingField(): string
     {
         return config('laraveltraits.ModelOrdering.field') ?? 'ordering';
     }
@@ -19,12 +17,9 @@ trait ModelOrdering
     /**
      * Returns next available ordering value
      *
-     * @param  array  $fieldsAndValues
-     * @return int
-     *
      * @throws ErrorException
      */
-    public static function getNewOrdering($fieldsAndValues = [])
+    public static function getNewOrdering(array $fieldsAndValues = []): int
     {
         if (! empty($fieldsAndValues) && ! method_exists(self::class, 'scopeOrderingFilterBy')) {
             throw new ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);
@@ -40,12 +35,9 @@ trait ModelOrdering
     /**
      * Resets ordering
      *
-     * @param  array  $fieldsAndValues
-     * @return void
-     *
      * @throws ErrorException
      */
-    public static function resetOrdering($fieldsAndValues = [])
+    public static function resetOrdering(array $fieldsAndValues = []): void
     {
         if (! empty($fieldsAndValues) && ! method_exists(self::class, 'scopeOrderingFilterBy')) {
             throw new ErrorException('Method scopeOrderingFilterBy is not set in '.self::class);

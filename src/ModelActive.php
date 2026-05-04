@@ -2,56 +2,46 @@
 
 namespace GPapakitsos\LaravelTraits;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait ModelActive
 {
     /**
      * Returns the title of "active" attribute
-     *
-     * @return string
      */
-    private function getActiveField()
+    private function getActiveField(): string
     {
         return config('laraveltraits.ModelActive.field') ?? 'active';
     }
 
     /**
      * Checks if model’s state is active
-     *
-     * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return (bool) $this->{$this->getActiveField()};
     }
 
     /**
      * Returns the title of model’s state
-     *
-     * @return string
      */
-    public function getActiveTitle()
+    public function getActiveTitle(): string
     {
         return trans('laraveltraits::package.ModelActive.titles.'.$this->{$this->getActiveField()});
     }
 
     /**
      * Scope a query to only include active models
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return void
      */
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): void
     {
         $query->where($this->getTable().'.'.$this->getActiveField(), true);
     }
 
     /**
      * Scope a query to only include inactive models
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return void
      */
-    public function scopeNotActive($query)
+    public function scopeNotActive(Builder $query): void
     {
         $query->where($this->getTable().'.'.$this->getActiveField(), false);
     }

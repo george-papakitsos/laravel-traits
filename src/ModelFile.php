@@ -3,19 +3,20 @@
 namespace GPapakitsos\LaravelTraits;
 
 use ErrorException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 trait ModelFile
 {
     /**
      * Checks if constants are defined
      *
-     * @return void
-     *
      * @throws ErrorException
      */
-    private static function modelConstantsExists()
+    private static function modelConstantsExists(): void
     {
         foreach (['FILE_INPUT_FIELD', 'FILE_MODEL_ATTRIBUTE', 'FILE_FOLDER', 'FILE_DEFAULT_ASSET_URL'] as $constant) {
             if (! defined(self::class.'::'.$constant)) {
@@ -26,10 +27,8 @@ trait ModelFile
 
     /**
      * Returns the storage disk
-     *
-     * @return string
      */
-    public static function getStorageDisk()
+    public static function getStorageDisk(): string
     {
         return defined(self::class.'::FILE_STORAGE_DISK') ? self::FILE_STORAGE_DISK : config('laraveltraits.ModelFile.default_storage_disk');
     }
@@ -37,12 +36,9 @@ trait ModelFile
     /**
      * Stores file if exists & adds the path of the uploaded file into request object
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws ErrorException|\Illuminate\Validation\ValidationException
+     * @throws ErrorException|ValidationException
      */
-    public static function storeFile($request)
+    public static function storeFile(Request $request): void
     {
         self::modelConstantsExists();
 
@@ -68,12 +64,9 @@ trait ModelFile
     /**
      * Deletes model’s file by provided id
      *
-     * @param  int  $id
-     * @return void
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
-    private static function deleteFileByID($id)
+    private static function deleteFileByID(int|string $id): void
     {
         $model = self::findOrFail($id);
 
@@ -82,10 +75,8 @@ trait ModelFile
 
     /**
      * Deletes model’s file if exists
-     *
-     * @return void
      */
-    public function deleteFile()
+    public function deleteFile(): void
     {
         if (! $this->fileExists()) {
             return;
@@ -106,12 +97,9 @@ trait ModelFile
     /**
      * Removes the previous file if exists & stores the new one
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws ErrorException|\Illuminate\Validation\ValidationException
+     * @throws ErrorException|ValidationException
      */
-    public static function changeFile($request)
+    public static function changeFile(Request $request): void
     {
         self::modelConstantsExists();
 
@@ -130,10 +118,8 @@ trait ModelFile
 
     /**
      * Checks if file exists
-     *
-     * @return bool
      */
-    public function fileExists()
+    public function fileExists(): bool
     {
         $path = $this->{$this::FILE_MODEL_ATTRIBUTE};
 
@@ -142,10 +128,8 @@ trait ModelFile
 
     /**
      * Returns file’s URL
-     *
-     * @return string|null
      */
-    public function getFileURL()
+    public function getFileURL(): ?string
     {
         $storageDisk = $this::getStorageDisk();
 
@@ -156,10 +140,8 @@ trait ModelFile
 
     /**
      * Returns file’s path
-     *
-     * @return string|null
      */
-    public function getFilePath()
+    public function getFilePath(): ?string
     {
         $storageDisk = $this::getStorageDisk();
 

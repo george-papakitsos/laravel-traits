@@ -9,9 +9,8 @@ use Orchestra\Testbench\TestCase;
 
 class FeatureTestCase extends TestCase
 {
-    public $route_prefix;
-    public $country;
-    public $user;
+    public Country $country;
+    public User $user;
 
     protected function setUp(): void
     {
@@ -41,6 +40,7 @@ class FeatureTestCase extends TestCase
     protected function defineEnvironment($app)
     {
         $app->config->set('app.locale', 'el');
+        $app->config->set('app.timezone', 'UTC');
 
         $app->config->set('database.default', 'testbench');
         $app->config->set('database.connections.testbench', [
@@ -60,6 +60,7 @@ class FeatureTestCase extends TestCase
         $router->group(['prefix' => 'users', 'namespace' => 'GPapakitsos\LaravelTraits\Tests\Controllers'], function () use ($router) {
             $router->get('get-resource/{id?}', 'UsersController@getResource');
             $router->post('add', 'UsersController@doAdd');
+            $router->post('add-return-model', 'UsersController@doAddReturnModel');
             $router->post('edit', 'UsersController@doEdit');
             $router->post('delete', 'UsersController@doDelete');
         });
