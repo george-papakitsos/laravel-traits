@@ -3,17 +3,21 @@
 namespace GPapakitsos\LaravelTraits;
 
 use ErrorException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 trait CRUDController
 {
+    protected bool $returnModelsFromCRUD = false;
+
     /**
      * Checks if controller’s property is set
      *
-     * @return void
-     *
      * @throws ErrorException
      */
-    private function controllerPropertiesAreSet()
+    private function controllerPropertiesAreSet(): void
     {
         foreach (['request', 'model'] as $property) {
             if (! isset($this->$property)) {
@@ -25,11 +29,9 @@ trait CRUDController
     /**
      * Returns model’s JSON response by provided id
      *
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @throws ErrorException|\Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ErrorException|ModelNotFoundException
      */
-    public function getResource()
+    public function getResource(): JsonResponse
     {
         $this->controllerPropertiesAreSet();
 
@@ -41,11 +43,9 @@ trait CRUDController
     /**
      * Creates a new model if the request is valid
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Database\Eloquent\Model
-     *
-     * @throws ErrorException|\Illuminate\Validation\ValidationException
+     * @throws ErrorException|ValidationException
      */
-    public function doAdd()
+    public function doAdd(): JsonResponse|Model
     {
         $this->controllerPropertiesAreSet();
 
@@ -66,11 +66,9 @@ trait CRUDController
     /**
      * Updates the model if the request is valid
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Database\Eloquent\Model
-     *
-     * @throws ErrorException|\Illuminate\Validation\ValidationException|\Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ErrorException|ValidationException|ModelNotFoundException
      */
-    public function doEdit()
+    public function doEdit(): JsonResponse|Model
     {
         $this->controllerPropertiesAreSet();
 
@@ -92,11 +90,9 @@ trait CRUDController
     /**
      * Deletes a model
      *
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @throws ErrorException|\Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ErrorException|ModelNotFoundException
      */
-    public function doDelete()
+    public function doDelete(): JsonResponse
     {
         $this->controllerPropertiesAreSet();
 

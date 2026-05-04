@@ -29,10 +29,8 @@ class User extends Model
 
     /**
      * Validation rules of the model
-     *
-     * @var array
      */
-    public $validations = [
+    public array $validations = [
         'add' => [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
@@ -47,8 +45,6 @@ class User extends Model
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory()
     {

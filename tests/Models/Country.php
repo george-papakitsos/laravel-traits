@@ -4,24 +4,18 @@ namespace GPapakitsos\LaravelTraits\Tests\Models;
 
 use Database\Factories\CountryFactory;
 use GPapakitsos\LaravelTraits\ModelOrdering;
+use Illuminate\Database\Eloquent\Attributes\WithoutTimestamps;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+#[WithoutTimestamps]
 class Country extends Model
 {
     use HasFactory, ModelOrdering;
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory()
     {
@@ -39,7 +33,7 @@ class Country extends Model
     /**
      * Scopes
      */
-    public function scopeOrderingFilterBy($query, $fieldsAndValues)
+    public function scopeOrderingFilterBy(Builder $query, array $fieldsAndValues)
     {
         foreach ($fieldsAndValues as $field => $value) {
             $query->where($field, $value);

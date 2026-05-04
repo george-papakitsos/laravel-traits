@@ -3,7 +3,7 @@ A bundle of some useful Laravel Model & Controller traits.
 
 ## Installation
 You can install the package via composer:
-### Laravel version >= 12 (requires PHP >= 8.2)
+### Laravel version >= 12 (requires PHP >= 8.3)
 ```bash
 composer require gpapakitsos/laravel-traits
 ```
@@ -58,18 +58,12 @@ $model->getActiveTitle();
 ```php
 /**
  * Scope a query to only include active models
- *
- * @param  \Illuminate\Database\Eloquent\Builder  $query
- * @return void
  */
 $model->active()->get();
 ```
 ```php
 /**
  * Scope a query to only include inactive models
- *
- * @param  \Illuminate\Database\Eloquent\Builder  $query
- * @return void
  */
 $model->notActive()->get();
 ```
@@ -215,17 +209,10 @@ class UsersController extends Controller
 {
     use CRUDController;
 
-    protected $request;
-    protected $model;
-
     // You can set the property $returnModelsFromCRUD as `true` if you would like the methods `doAdd` & `doEdit` to return the model
-    // protected $returnModelsFromCRUD = true;
+    // protected bool $returnModelsFromCRUD = true;
 
-    public function __construct(Request $request, User $model)
-    {
-        $this->request = $request;
-        $this->model = $model;
-    }
+    public function __construct(protected Request $request, protected User $model) {}
 }
 ```
 
@@ -258,10 +245,8 @@ class User extends Model
 
     /**
      * Validation rules of the model
-     *
-     * @var array
      */
-    public $validations = [
+    public array $validations = [
         'add' => [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',

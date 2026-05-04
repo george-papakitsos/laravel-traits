@@ -3,26 +3,19 @@
 namespace Database\Factories;
 
 use GPapakitsos\LaravelTraits\Tests\Models\Country;
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+#[UseModel(Country::class)]
 class CountryFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Country::class;
-
-    /**
      * Define the model's default state.
-     *
-     * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->country(),
+            'name' => fake()->country(),
             'planet' => 'Earth',
             'ordering' => 1,
         ];
